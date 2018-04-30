@@ -2,7 +2,7 @@
   "name": "MyCMDR",
   "version": "1.0.0",
   "description": "",
-  "main": "./main/main.js",
+  "main": "./main.js",
   "author": "MemoryPattern",
   "license": "ISC",
   "devDependencies": {
@@ -10,11 +10,15 @@
     "electron-packager": "^8.7.2"
   },
   "dependencies": {
-	"express": "^4.15.3",
-	"socket.io": "^2.0.3",
-	"ip": "^1.1.5"
+    "express": "^4.15.3",
+    "fs": "0.0.1-security",
+    "glob": "^7.1.2",
+    "ip": "^1.1.5",
+    "read-file": "^0.2.0",
+    "socket.io": "^2.0.3"
   },
   "scripts": {
-	"buildWin32": "electron-packager . MyCMDR --platform=win32 --arch=x64"
+    "buildWin32": "electron-packager . MyCMDR --platform=win32 --arch=x64",
+    "start": "electron ."
   }
 }

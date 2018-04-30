@@ -5,9 +5,9 @@
 **MyCMDR** is a Companion Application for  **Elite: Dangerous** that runs on your PC, it creates a local Web Server for your Devices *(Mobile Phone, Tablet, Laptop, TV, etc)* to connect to and display data from your Journal Log files. The best thing about **MyCMDR** is that it's Open Source allowing anyone to edit what it displays, how it displays it and the most important thing, that it runs on any device with a WebBrowser.
 
 ## How it Works
-Using **Node.JS** as the base Framework, it utilizes **Express** to create a local Web Server that you can connect to with any device that has Internet Capabilities. The main application reads your Journal Logs, indexing the last entry it read and passing that Data to a custom Class file that holds all of your CMDR Information. It then uses **Socket.io** to pass this Class file onto the **Client** that is connected, it will only send data *IF* a **Client** is connected.
+Using **Node.JS** as the base Framework, it utilizes **Express** to create a local Web Server that you can connect to with any device that has Internet Capabilities. The main application reads your Journal Logs, indexing the last entry it reads and passing that Data to an array that holds all of your CMDR Information. It then uses **Socket.io** to pass this array onto the **Client** that is connected, it will only send data *IF* a **Client** is connected and *IF* there is new information.
 
-The **Client** then takes this information and displays it on-screen, so the majority of the work is done by your PC helping it to feel quick and smooth on your Device.
+The **Client** then takes this information and stores it in another array that is local, you can then utilize addons (made by myself or others) to display this data in different ways. The majority of the work is done by your PC helping it to feel quick and smooth on your Device.
 
 ## Getting Started
 ### Users

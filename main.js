@@ -5,7 +5,9 @@ const {
   BrowserWindow,
   electron
 } = require('electron');
-var config = require('./config');
+var config = require('./main/config');
+const glob = require('glob');
+const fs = require('fs');
 const path = require('path');
 const url = require('url');
 var mainWin = null;
@@ -15,11 +17,12 @@ var express = require('express');
 var exp = express();
 var ip = require('ip');
 var serv = require('http').Server(exp);
-var fs = require('fs');
 var journalDir = process.env.USERPROFILE + config.path;
+var read = require('read-file');
 
 var SOCKET;
 var CMDR;
+var ADDONS = [];
 var EXPLORE = [];
 var BOUNTIES = [];
 var MARKET = [];
@@ -43,10 +46,10 @@ app.on('ready', function() {
     height: config.height,
     frame: false,
     show: false,
-    icon: __dirname + '/app.ico'
+    icon: __dirname + '/main/app.ico'
   })
   mainWin.loadURL(url.format({
-    pathname: path.join(__dirname, 'index.html'),
+    pathname: path.join(__dirname, 'main/index.html'),
     protocol: 'file:',
     slashes: true
   }));
@@ -60,7 +63,7 @@ app.on('ready', function() {
     require('electron').shell.openExternal(url);
   });
 
-  tray = new Tray(__dirname + '/app.ico');
+  tray = new Tray(__dirname + '/main/app.ico');
   tray.setToolTip('MyCMDR');
   tray.on('click', function(event) {
     if (mainWin.isVisible()) {
@@ -96,6 +99,41 @@ exp.use('/client', express.static(__dirname + '/client'));
 serv.listen(config.port);
 var io = require('socket.io')(serv, {});
 //SERVER
+
+//LOAD ALL ADDONS IN CLIENT FOLDER
+LoadAddons = function() {
+  glob('client/addons/**/', function(er, files) {
+    for (var i = 1; i < files.length; i++) {
+      CreateADDON(files[i]);
+    }
+  });
+}
+
+function CreateADDON(data) {
+  glob(data + '*.*', function(er, files) {
+    let addonTitle = data.split("/")[2].replace("_", " ");
+    let css, html, js;
+
+    for (var i = 0; i < files.length; i++) {
+      if (files[i].includes("html")) {
+        html = files[i];
+      }
+      if (files[i].includes("css")) {
+        css = files[i];
+      }
+      if (files[i].includes("js")) {
+        js = files[i];
+      }
+    }
+
+    ADDONS.push({
+      title: addonTitle,
+      css: fs.readFileSync('./' + css, 'utf8'),
+      html: fs.readFileSync('./' + html, 'utf8'),
+      js: js
+    });
+  });
+}
 
 //HOLDER FOR CMDR DATA
 var Cmdr = function() {
@@ -134,7 +172,9 @@ Cmdr.Create = function() {
 //CALLED WHEN A CLIENT CONNECTS
 Cmdr.OnConnect = function() {
   if (SOCKET != null) {
-    SOCKET.emit('DataPack', CMDR);
+    SOCKET.emit('cmdrData', CMDR);
+    SOCKET.emit('exploreData', EXPLORE);
+    SOCKET.emit('bountyData', BOUNTIES);
     SOCKET.emit('tradeData', MARKET);
   }
 }
@@ -154,6 +194,8 @@ function ReadJournals() {
   });
 
   for (var i = 0; i < FileNames.length; i++) {
+    if (FileNames[i].includes("json"))
+      continue
     //IF FILE IS NEWER THAN INDEXED
     if (i > fileIndex) {
       fileIndex = i; //SET INDEX TO NEW FILE
@@ -234,6 +276,12 @@ function ReadLines(data) {
     if (obj.event === "CrewHire" || obj.event === "RefuelAll" || obj.event === "RepairAll" || obj.event === "RestockVehicle") {
       CMDR.credits -= obj.Cost;
     }
+    if(obj.event === "ShipyardBuy") {
+      if(obj.SellPrice)
+        CMDR.credits += obj.SellPrice;
+      if(obj.ShipPrice)
+        CMDR.credits -= obj.ShipPrice;
+    }
     if (obj.event === "ModuleBuy") {
       if (obj.SellPrice)
         CMDR.credits += obj.SellPrice;
@@ -247,16 +295,6 @@ function ReadLines(data) {
     if (obj.event === "MarketSell") {
       CMDR.credits += obj.TotalSale;
       AddToMarket(obj);
-    }
-
-    //CHAT
-    if (obj.event === "ReceiveText") {
-      if (SOCKET != null)
-        SOCKET.emit('chatLOG', {
-          from: obj.From_Localised,
-          msg: obj.Message_Localised,
-          chan: obj.Channel,
-        });
     }
   }
 }
@@ -330,15 +368,29 @@ function AddToMarket(obj) {
   }
 }
 
+//LOAD ADDONS AND CREATE FIRST INSTANCE OF CMDR
+LoadAddons();
 Cmdr.Create();
+
 io.sockets.on('connection', function(socket) {
   socket.on('disconnect', function() {
     SOCKET = null;
   });
+
   if (SOCKET != null)
     socket.disconnect();
+
   SOCKET = socket;
   Cmdr.OnConnect();
+  SOCKET.emit('addonData', ADDONS);
+
+  //BELOW IS ONLY FOR DEVELOPMENT PURPOSES!
+  socket.on('reloadAddons', function() {
+    ADDONS = [];
+    LoadAddons();
+    SOCKET.emit('addonData', ADDONS);
+    SOCKET.emit('addonsReloaded');
+  });
 });
 
 global.isUserConnected = function() {
@@ -357,7 +409,6 @@ global.forceDisconnect = function() {
 setInterval(function() {
   TIMESINCE++;
   Cmdr.Update();
-
   if (isUserConnected()) {
     tray.setToolTip('MyCMDR - Connected');
   } else {
