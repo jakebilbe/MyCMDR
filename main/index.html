@@ -1,171 +1,47 @@
 <html>
+
 <head>
-<title>MyCMDR</title>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://bootswatch.com/sandstone/bootstrap.min.css">
-<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-<script src="https://use.fontawesome.com/5a7a95fe41.js"></script>
-<script src="https://code.jquery.com/jquery-3.2.1.js"></script>
-<script type="text/javascript" src="path/to/bootstrap-tooltip.js"></script>
-<script type="text/javascript" src="path/to/bootstrap-confirmation.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<style>
-html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
-
-/***** COLORS *****/
-.color {
-	color: #efac4e;
-}
-.disconnected {
-	color: #d9534f;
-}
-.connected {
-	color: #93c54b;
-}
-
-#menuBar {
-	margin: 0;
-	padding: 0;
-	width: 100%;
-	height: 30px;
-	background: #3e3f3a;
-	-webkit-app-region: drag;
-	position: absolute;
-	top: 0;
-	left: 0;
-}
-
-/***** TITLE MENU *****/
-#titleBar {
-	margin: 0;
-	padding: 0;
-	padding-top: 2px;
-	padding-left: 5px;
-	width: 100%;
-	height: 30px;
-	float: left;
-	color: #fff;
-  	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-	line-height: 30px;
-	font-size: 12px;
-  	-webkit-touch-callout: none;
-  	-webkit-user-select: none;
-  	-khtml-user-select: none;
-  	-moz-user-select: none;
-  	-ms-user-select: none;
-  	user-select: none;
-  	cursor: default;
-}
-
-/***** CONTROL BUTTONS *****/
-#appBtns {
-	margin: 0;
-	padding: 0;
-	width: 100%;
-	height: 30px;
-	position: absolute;
-	top: 0;
-	right: 0;
-}
-#min-btn, #close-btn {
-	margin: 0;
-	padding: 0;
-	padding-top: 7px;
-	padding-left: 5px;
-	width: 30px;
-	height: 30px;
-	float: right;
-	color: #fff;
-	-webkit-app-region: no-drag;
-}
-#min-btn:hover, #close-btn:hover {
-	color: #93c54b;
-}
-
-/***** CONNECTION STATUS *****/
-#usrStatus {
-	margin: 0;
-	margin-top: 50px;
-	padding: 0;
-	display: block;
-	width: 100%;
-	height: 70px;
-	text-align: center;
-	color: #1c1c1c;
-}
-
-#usrControls {
-	margin: 0;
-	margin-top: 5px;
-	padding: 0;
-	display: none;
-	width: 100%;
-	height: 50px;
-	text-align: center;
-	color: #1c1c1c;
-}
-
-/***** FOOTER *****/
-#footerArea {
-	margin: 0;
-	padding: 0;
-	width: 100%;
-	height: 50px;
-	position: absolute;
-	bottom: 0;
-}
-
-#footerArea p {
-	margin: 0;
-	padding: 0;
-	width: 100%;
-	height: 20px !important;
-	font-size: 12px;
-  	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-	text-align: center;
-	line-height: 20px;
-}
-
-#footerArea a {
-	text-decoration: none;
-}
-</style>
+  <title>MyCMDR</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/jpg" href="/Client/icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+  <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
 </head>
-<body>
-<div id="menuBar">
-	<div id="titleBar" class="noselect"></div>
-    <div id="appBtns">
-		<a href="#" id="close-btn"><i class="fa fa-window-close" aria-hidden="true"></i></a>
-		<a href="#" id="min-btn"><i class="fa fa-window-minimize" aria-hidden="true"></i></a>
-	</div>
-</div>
 
-<div id="usrStatus"><span class="disconnected">
+<body>
+  <div id="menuBar">
+    <div id="titleBar" class="noselect"></div>
+    <div id="appBtns">
+      <a href="#" id="close-btn"><i class="fa fa-window-close" aria-hidden="true"></i></a>
+      <a href="#" id="min-btn"><i class="fa fa-window-minimize" aria-hidden="true"></i></a>
+    </div>
+  </div>
+
+  <div id="usrStatus"><span class="disconnected">
 <i class="fa fa-user-times fa-3x" aria-hidden="true"></i>
 <p>Client Disconnected</p>
 </span></div>
-<div id="usrControls">
+  <div id="usrControls">
     <button class="btn btn-default" id="disconnect-btn" data-toggle="confirmation" type="button">Force Disconnect</button>
-</div>
+  </div>
 
-<div id="footerArea">
+  <div id="footerArea">
     <p id="serverInfo"></p>
-	<p>
-		<a href="https://github.com/MemoryPattern/MyCMDR" target="_blank"><i class="fa fa-github" aria-hidden="true"></i> Github</a>
-		<a href="https://www.reddit.com/r/EliteDangerous/comments/6re1zm/pc_only_mycmdr_companion_application/" target="_blank"><i class="fa fa-reddit-alien" aria-hidden="true"></i> Reddit</a>
-		<a href="http://edcodex.info/?m=tools&entry=430" target="_blank"><i class="fa fa-globe" aria-hidden="true"></i> EDCodex</a>
-	</p>
-</div>
+    <p>
+      <a href="https://github.com/JakeBilbe/MyCMDR" target="_blank"><i class="fab fa-github-square"></i> Github</a>
+      <a href="https://github.com/JakeBilbe/MyCMDR" target="_blank"><i class="fab fa-discord"></i> Discord</a>
+    </p>
+  </div>
 </body>
 <script>
   const remote = require('electron').remote;
-  var mainScreen  = require('electron').screen.getPrimaryDisplay();
+  var mainScreen = require('electron').screen.getPrimaryDisplay();
 
   var ip = require('ip');
   var config = require('./config');
@@ -180,34 +56,35 @@ html, body {
   document.getElementById('serverInfo').innerHTML = 'Connect to <span class="color"><a href="http://' + address + '" target="_blank">' + address + '</a></span>';
 
   //Add EventListeners to Buttons
-  document.getElementById("min-btn").addEventListener("click", function (e) {
-       remote.getCurrentWindow().hide();
+  document.getElementById("min-btn").addEventListener("click", function(e) {
+    remote.getCurrentWindow().hide();
   });
-  document.getElementById("close-btn").addEventListener("click", function (e) {
-       remote.getCurrentWindow().close();
+  document.getElementById("close-btn").addEventListener("click", function(e) {
+    remote.getCurrentWindow().close();
   });
-  document.getElementById("disconnect-btn").addEventListener("click", function (e) {
-      remote.getGlobal("forceDisconnect")();
-	  usrStatus.innerHTML = usrDisconnected;
-	  document.getElementById('usrControls').style.display = "none";
-	  remote.getCurrentWindow().setSize(config.width, 170, false);
-	  remote.getCurrentWindow().setPosition(mainScreen.bounds.width - config.width - 10, mainScreen.bounds.height - 170 - 50);
+  document.getElementById("disconnect-btn").addEventListener("click", function(e) {
+    remote.getGlobal("forceDisconnect")();
+    usrStatus.innerHTML = usrDisconnected;
+    document.getElementById('usrControls').style.display = "none";
+    remote.getCurrentWindow().setSize(config.width, 170, false);
+    remote.getCurrentWindow().setPosition(mainScreen.bounds.width - config.width - 10, mainScreen.bounds.height - 170 - 50);
   });
 
   //Check every Second for Client Status
-  setInterval(function(){
-  if(remote.getGlobal("isUserConnected")()) {
-	  usrStatus.innerHTML = usrConnected;
-	  document.getElementById('usrControls').style.display = "block";
-	  remote.getCurrentWindow().setSize(config.width, 230, false);
-	  remote.getCurrentWindow().setPosition(mainScreen.bounds.width - config.width - 10, mainScreen.bounds.height - 230 - 50);
-  } else {
-	  usrStatus.innerHTML = usrDisconnected;
-	  document.getElementById('usrControls').style.display = "none";
-	  remote.getCurrentWindow().setSize(config.width, 170, false);
-	  remote.getCurrentWindow().setPosition(mainScreen.bounds.width - config.width - 10, mainScreen.bounds.height - 170 - 50);
-  }
-}, 1000);
+  setInterval(function() {
+    if (remote.getGlobal("isUserConnected")()) {
+      usrStatus.innerHTML = usrConnected;
+      document.getElementById('usrControls').style.display = "block";
+      remote.getCurrentWindow().setSize(config.width, 230, false);
+      remote.getCurrentWindow().setPosition(mainScreen.bounds.width - config.width - 10, mainScreen.bounds.height - 230 - 50);
+    } else {
+      usrStatus.innerHTML = usrDisconnected;
+      document.getElementById('usrControls').style.display = "none";
+      remote.getCurrentWindow().setSize(config.width, 170, false);
+      remote.getCurrentWindow().setPosition(mainScreen.bounds.width - config.width - 10, mainScreen.bounds.height - 170 - 50);
+    }
+  }, 1000);
   $('#disconnect-btn').confirmation('toggle')
 </script>
+
 </html>

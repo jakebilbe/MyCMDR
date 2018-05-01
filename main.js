@@ -46,7 +46,7 @@ app.on('ready', function() {
     height: config.height,
     frame: false,
     show: false,
-    icon: __dirname + '/main/app.ico'
+    icon: __dirname + '/main/taskbar.ico'
   })
   mainWin.loadURL(url.format({
     pathname: path.join(__dirname, 'main/index.html'),
@@ -63,7 +63,7 @@ app.on('ready', function() {
     require('electron').shell.openExternal(url);
   });
 
-  tray = new Tray(__dirname + '/main/app.ico');
+  tray = new Tray(__dirname + '/main/taskbar.ico');
   tray.setToolTip('MyCMDR');
   tray.on('click', function(event) {
     if (mainWin.isVisible()) {
