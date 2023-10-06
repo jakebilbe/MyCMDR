@@ -11,7 +11,7 @@ The **Client** then takes this information and stores it in another array that i
 
 ## Getting Started
 ### Users
-* Go to [Releases](https://github.com/MemoryPattern/MyCMDR/releases) and download the latest
+* Go to [Releases](https://github.com/jakebilbe/MyCMDR/releases) and download the latest
 * Extract to your Directory of choice
 * Start **MyCMDR** by opening **MyCMDR.exe**
 * On your **Device** open your WebBrowser and type in the IP:PORT displayed on the app
